@@ -150,7 +150,7 @@ if __name__ == '__main__':
             csv_train = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_train.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
             csv_valid = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_valid.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
         elif inp_dataset == 'PersonaChat':
-            train_iterator, valid_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(max_length = MAX_LENGTH, batch_size = BATCH_SIZE)
+            train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(max_length = MAX_LENGTH, batch_size = BATCH_SIZE)
             csv_train = pd.read_csv('./Dataset/PersonaChat/PersonaChat_train.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
             csv_valid = pd.read_csv('./Dataset/PersonaChat/PersonaChat_valid.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
         CLIP = 10               # gradient clip value    # directory name to save the models.
@@ -201,4 +201,4 @@ if __name__ == '__main__':
             print('Error: Model Not There')
             sys.exit(0)
         #epochs = range(0,25,2)
-        ProbeTasks(model,MODEL_SAVE_PATH, [0,24,'best_bleu'], inp_model, train_iterator, valid_iterator, inp_dataset, csv_train, csv_valid, itos_context_id,inp_seed,run_id)
+        ProbeTasks(model,MODEL_SAVE_PATH, [0,24,'best_bleu'], inp_model, train_iterator, test_iterator, inp_dataset, csv_train, csv_valid, itos_context_id,inp_seed,run_id)
