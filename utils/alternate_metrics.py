@@ -106,7 +106,9 @@ if __name__ == '__main__':
     target = open(os.path.join("Best_Models_"+args.dataset+".csv"), "a")
     fields = ['Model','Seed','METEOR Epoch','BLEU Epoch','BERT Epoch','F1 Epoch','METEOR Score','BLEU Score','BERT Score','F1 Score']
     writer = csv.DictWriter(target, fieldnames=fields)
-    writer.writerow(dict(zip(['Model','Seed','METEOR Epoch','BLEU Epoch','BERT Epoch','F1 Epoch','METEOR Score','BLEU Score','BERT Score','F1 Score'], ['Model','Seed','METEOR Epoch','BLEU Epoch','BERT Epoch','F1 Epoch','METEOR Score','BLEU Score','BERT Score','F1 Score'])))
+    writer.writerow(dict(zip(['Model','Seed','METEOR Epoch','BLEU Epoch','BERT Epoch','F1 Epoch',\
+    'METEOR Score','BLEU Score','BERT Score','F1 Score'], ['Model','Seed','METEOR Epoch', \
+    'BLEU Epoch','BERT Epoch','F1 Epoch','METEOR Score','BLEU Score','BERT Score','F1 Score'])))
     with open(args.dataset+'_BERT.txt', 'r', encoding="utf8") as f:
         for line in f:
             values = line.split('<del>')

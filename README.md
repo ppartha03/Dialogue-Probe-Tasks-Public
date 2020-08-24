@@ -6,7 +6,7 @@ The modified dataset containing the probe tasks and the script to generate the p
 ### Package Requirements
 We use python 3.6 for all the experiments in the paper.
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Training the model

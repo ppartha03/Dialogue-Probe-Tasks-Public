@@ -165,13 +165,15 @@ if __name__ == '__main__':
         np.random.seed(inp_seed)
         run_id = inp_model + "_seed_" + str(inp_seed)
         if inp_dataset == 'MultiWoZ':
-            train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = MultiWoZ(batch_size = BATCH_SIZE ,max_length = MAX_LENGTH)
+            train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = MultiWoZ(batch_size = BATCH_SIZE , \
+            max_length = MAX_LENGTH)
             csv_train = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_train.csv', header = None,\
              converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
             csv_valid = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_valid.csv', header = None,\
              converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
         elif inp_dataset == 'PersonaChat':
-            train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(max_length = MAX_LENGTH, batch_size = BATCH_SIZE)
+            train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(max_length = MAX_LENGTH,\
+             batch_size = BATCH_SIZE)
             csv_train = pd.read_csv('./Dataset/PersonaChat/PersonaChat_train.csv', header = None,\
              converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
             csv_valid = pd.read_csv('./Dataset/PersonaChat/PersonaChat_valid.csv', header = None,\
