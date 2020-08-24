@@ -75,7 +75,7 @@ class AttnDecoder(nn.Module):
     def forward(self, input, hidden, cell, encoder_outputs):
         embedded = self.embedding(input)
         encoder_outputs = encoder_outputs.view(-1, self.hidden_size, self.max_length)
-        attn_weights = F.softmax(self.attn(torch.cat((embedded,hidden[0]),1)),dim=1).unsqueeze(0).view(-1,self.max_length,1)
+        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[0]), 1)), dim=1).unsqueeze(0).view(-1, self.max_length, 1)
         #encoder_outputs = encoder_outputs.view(-1, self.hidden_size, self.max_length)
         attn_applied = torch.bmm(encoder_outputs, attn_weights)
         output = torch.cat((embedded, attn_applied[:, :, 0]), 1)

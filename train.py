@@ -251,5 +251,7 @@ model.load_state_dict(torch.load(model_file))
 sample_saver_test = open(os.path.join(SAMPLES_PATH,'samples_test.txt'),'w')
 test_loss = evaluate(model, test_iterator, criterion, itos_vocab, itos_context_id, sample_saver_test)
 test_bleu = getBLEU(sample_saver_eval.name)
-print(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')
-logging.info(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')
+print(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | \
+Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')
+logging.info(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | \
+Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')

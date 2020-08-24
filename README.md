@@ -4,6 +4,7 @@ We evaluate the dialogue generation models on their performance on probe tasks a
 The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/dataset`
 
 ### Package Requirements
+We use python 3.6 for all the experiments in the paper.
 ```
 pip install requirements.txt
 ```
@@ -39,7 +40,7 @@ python format_to_table.py --dataset MultiWoZ
 ```
 ## Alternate Metrics
 
-To select models with alternate metrics run `utils/alternate_metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average), BLEU.
+To select models with alternate metrics run `utils/alternate_metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average) and BLEU.
 
 ```
 python alternate_metrics.py --dataset MultiWoZ

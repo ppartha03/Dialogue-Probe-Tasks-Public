@@ -45,7 +45,7 @@ args = parser.parse_args()
 def plotHexbin(LM,epoch,filename, X_r):
     # the function plots the hidden representation of the contexts
     # from different models. The function is model invariant.
-    
+
     fig, axs = plt.subplots(ncols=1, sharey=True, figsize=(7, 4))
     fig.subplots_adjust(hspace=0.5, left=0.07, right=0.93)
 
@@ -115,10 +115,10 @@ def ProbeTasks(model, model_folder, epochs, modeltype, train_iterator, \
             flag = 1
 
     if dataset == 'MultiWoZ':
-        all_tasks = ['contextID','AllTopics','filename', 'UtteranceIndex', 'Context', 'Target', 'ResponseLength',\
-         'UtteranceLoc','RepeatInfo','RecentTopic','RecentSlots', 'RecentValues', \
-         'NumRecentInfo','AllValues', 'AllSlots', 'NumAllInfo','NumRepeatSlots', 'NumAllTopics', 'IsMultiTask', \
-         'EntitySlots', 'EntityValues', 'ActionSelect']
+        all_tasks = ['contextID','AllTopics','filename', 'UtteranceIndex', 'Context', \
+        'Target', 'ResponseLength','UtteranceLoc','RepeatInfo','RecentTopic','RecentSlots',\
+         'RecentValues','NumRecentInfo','AllValues', 'AllSlots', 'NumAllInfo','NumRepeatSlots',\
+         'NumAllTopics', 'IsMultiTask','EntitySlots', 'EntityValues', 'ActionSelect']
         all_tasks_ind = [1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
         fieldnames=['Model','Epoch','Seed']+[all_tasks[i] for i in all_tasks_ind]
     else:
@@ -145,7 +145,8 @@ def ProbeTasks(model, model_folder, epochs, modeltype, train_iterator, \
         X_valid = torch.cat([x[1].view(1,-1) for x in sorted(zip(cid_valid,X_valid))], dim =0)
         if inp_seed == 100:
             X_r = pca.fit_transform(X_train.cpu())
-            plotHexbin(modeltype,str(epoch),os.path.join(ANALYSIS_PATH,'Graphs',modeltype+'_'+str(epoch+1)+'.png'),X_r)
+            plotHexbin(modeltype,str(epoch),os.path.join(ANALYSIS_PATH,\
+            'Graphs',modeltype+'_'+str(epoch+1)+'.png'),X_r)
         for task in all_tasks_ind:
             y_train = csv_train.get(task)
             y_valid = csv_valid.get(task)

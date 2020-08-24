@@ -35,13 +35,13 @@ def get_Data():
     for row in reader:
         if i == 0:
             header = row
-            i+=1
+            i += 1
         else:
             for cols in header[3:]:
                 if 'best' not in row[1]:
                     data[row[0]][row[2]][row[1]].update({cols:row[header.index(cols)]})
     #impute average
-    fields = ['Model','Seed','Epoch']+header[3:]
+    fields = ['Model','Seed','Epoch'] + header[3:]
     writer = csv.DictWriter(target, fieldnames=fields)
     writer.writerow(dict(zip(['Model','Seed','Epoch']+header[3:], ['Model','Seed','Epoch']+header[3:])))
     for model in models:
@@ -57,7 +57,8 @@ def get_Data():
     return header
 
 def createGraph(graphparam):
-    sns.lineplot(x = 'Epoch', y =graphparam, style = 'Model',hue = 'Model',data = pd.read_csv(os.path.join(filepath,"All_epoch_Probe_Tasks_"+args.dataset+".csv")))
+    sns.lineplot(x = 'Epoch', y =graphparam, style = 'Model', \
+    hue = 'Model',data = pd.read_csv(os.path.join(filepath,"All_epoch_Probe_Tasks_"+args.dataset+".csv")))
     plt.savefig(os.path.join(filepath,'plot_'+graphparam+'.png'))
     plt.close()
 

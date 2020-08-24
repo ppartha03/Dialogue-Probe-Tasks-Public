@@ -16,5 +16,5 @@ for a,v in zip(ave,var):
         if i == 0:
             s += a[i] + '&'
         else:
-            s+='{:.2f} $\pm$ {:3.2f} &'.format(float(a[i])*100, float(v[i])*100)
+            s+='{:.2f} $\pm$ {:3.2f} &'.format(float(a[i])*100, float(v[i]) * 100)
     fp.write(s+'\n\n')

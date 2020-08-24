@@ -69,8 +69,38 @@ def Metrics(file_loc, increment=4, embedding_dict=None):
     return {'METEOR':meteor_s/float(cnt_),'BLEU': sent_bleu/float(cnt_),'F1': r_f1/float(cnt_),'BERT':bert/float(cnt_)}
 
 if __name__ == '__main__':
-    bestmodels = {'bilstm_attn':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}},'hred':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}}, 'seq2seq_attn':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}}, \
-    'seq2seq':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}},'transformer':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}}}
+    bestmodels = {'bilstm_attn':{'100':{'METEOR':{'score':-math.inf,'epoch':0}, \
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},\
+    '101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},\
+    'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},\
+    '102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},\
+    'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}},\
+    'hred':{'100':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},\
+    'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},\
+    '101':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},\
+    'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}},\
+    '102':{'METEOR':{'score':-math.inf,'epoch':0},'BLEU':{'score':-math.inf,'epoch':0},\
+    'BERT':{'score':-math.inf,'epoch':0},'F1':{'score':-math.inf,'epoch':0}}}, \
+    'seq2seq_attn':{'100':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}}}, \
+    'seq2seq':{'100':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}}},'transformer':{'100':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'101':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}},'102':{'METEOR':{'score':-math.inf,'epoch':0},\
+    'BLEU':{'score':-math.inf,'epoch':0},'BERT':{'score':-math.inf,'epoch':0},\
+    'F1':{'score':-math.inf,'epoch':0}}}}
     samples_folder = os.path.join('..','Results',args.dataset,'Samples')
     emb_dict = {}
     target = open(os.path.join("Best_Models_"+args.dataset+".csv"), "a")

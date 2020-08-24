@@ -5,12 +5,11 @@ import os
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+def contexttoks(x): return x.split()[-max_length:]
+
+def toks(x): return x.split()
 
 def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size = 2, max_length=100):
-
-    def contexttoks(x): return x.split()[-max_length:]
-
-    def toks(x): return x.split()
 
     context_id = data.Field()
     # multi class
@@ -48,15 +47,22 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
     action = data.Field(pad_token = '' , unk_token = None, tokenize = toks)
 
     if task == 'dialogue':
-        train = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_train.csv'), format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),('UtteranceLoc',dialogue_position) ])
-        valid = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_valid.csv'), format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),('UtteranceLoc',dialogue_position) ])
-        test =  data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_test.csv'), format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),('UtteranceLoc',dialogue_position) ])
+        train = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_train.csv'),\
+         format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),\
+    ('UtteranceLoc',dialogue_position) ])
+        valid = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_valid.csv'),\
+         format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),\
+    ('UtteranceLoc',dialogue_position) ])
+        test =  data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_test.csv'),\
+         format='csv',fields=[('context_id',None),('AllTopics',None),('filename', None),\
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None),\
+    ('UtteranceLoc',dialogue_position) ])
 
     else:
-        train = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_train.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
+        train = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_train.csv'), \
+        format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
     ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
     ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
@@ -65,7 +71,8 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
     ('NumAllInfo',number_all_info),\
     ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
     ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
-        valid = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_valid.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
+        valid = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_valid.csv'),\
+         format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
     ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
     ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
@@ -74,7 +81,8 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
     ('NumAllInfo',number_all_info),\
     ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
     ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
-        test = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_test.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
+        test = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_test.csv'), \
+        format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
     ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
     ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
@@ -84,13 +92,16 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
     ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
     ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
 
-    train_iter, valid_iter ,test_iter = BucketIterator.splits((train, valid, test),batch_size = batch_size, sort_key=lambda x: x.UtteranceLoc,device = device)
+    train_iter, valid_iter ,test_iter = BucketIterator.splits((train, valid, test),\
+    batch_size = batch_size, sort_key=lambda x: x.UtteranceLoc,device = device)
     TEXT.build_vocab(train,min_freq=3)
     context_id.build_vocab(train,valid,test)
     dialogue_position.build_vocab(train,valid,test)
-    return train_iter, valid_iter, test_iter, TEXT.vocab.stoi['<pad>'], len(TEXT.vocab), TEXT.vocab.itos, context_id.vocab.itos
+    return train_iter, valid_iter, test_iter, TEXT.vocab.stoi['<pad>'],\
+     len(TEXT.vocab), TEXT.vocab.itos, context_id.vocab.itos
 
-def PersonaChat(data_folder = './Dataset/PersonaChat/',task = 'dialogue', batch_size = 2, max_length=100):
+def PersonaChat(data_folder = './Dataset/PersonaChat/',task = 'dialogue',\
+ batch_size = 2, max_length=100):
     def contexttoks(x): return x.split()[-max_length:]
     def toks(x): return x.split()
     context_id = data.Field()
@@ -98,7 +109,8 @@ def PersonaChat(data_folder = './Dataset/PersonaChat/',task = 'dialogue', batch_
     filename = None
     utterance_index = None
     # Sequential Data
-    TEXT = data.Field(sequential=True, fix_length = max_length ,eos_token = '<eor>', init_token = '<sos>',pad_token = '<pad>', tokenize = contexttoks)
+    TEXT = data.Field(sequential=True, fix_length = max_length ,\
+    eos_token = '<eor>', init_token = '<sos>',pad_token = '<pad>', tokenize = contexttoks)
     #target = data.Field()
     # single class
     target_length = data.Field(sequential=False)
@@ -108,22 +120,33 @@ def PersonaChat(data_folder = './Dataset/PersonaChat/',task = 'dialogue', batch_
     wordCont = data.Field(sequential=False)
 
     if task == 'dialogue':
-        train = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_train.csv'), format='csv',fields=[('context_id',context_id),('filename', None),\
+        train = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_train.csv'),\
+         format='csv',fields=[('context_id',context_id),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None) ])
-        valid = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_valid.csv'), format='csv',fields=[('context_id',context_id),('filename', None),\
+        valid = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_valid.csv'),\
+         format='csv',fields=[('context_id',context_id),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None) ])
-        test = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_test.csv'), format='csv',fields=[('context_id',context_id),('filename', None),\
+        test = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_test.csv'),\
+         format='csv',fields=[('context_id',context_id),('filename', None),\
     ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('length',None) ])
 
     else:
-        train = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_train.csv'), format='csv',fields=[('context_id',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('PersonalInfo',personal_info),('WordCont',wordCont)])
-        valid = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_valid.csv'), format='csv',fields=[('context_id',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('PersonalInfo',personal_info),('WordCont',wordCont)])
-        test = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_test.csv'), format='csv',fields=[('context_id',None),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('PersonalInfo',personal_info),('WordCont',wordCont)])
+        train = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_train.csv'), \
+        format='csv', fields=[('context_id',None), ('filename', None),\
+    ('UtteranceIndex',None), ('Context',TEXT), ('Target',TEXT), ('Responselength',target_length), \
+    ('UtteranceLoc',dialogue_position), ('PersonalInfo',personal_info), ('WordCont',wordCont)])
+        valid = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_valid.csv'),\
+         format='csv', fields=[('context_id',None), ('filename', None),\
+    ('UtteranceIndex',None), ('Context',TEXT), ('Target',TEXT), ('Responselength',target_length), \
+    ('UtteranceLoc',dialogue_position), ('PersonalInfo',personal_info), ('WordCont',wordCont)])
+        test = data.TabularDataset(path=os.path.join(data_folder,'PersonaChat_test.csv'),\
+         format='csv', fields=[('context_id',None), ('filename', None),\
+    ('UtteranceIndex',None), ('Context',TEXT), ('Target',TEXT), ('Responselength',target_length),\
+     ('UtteranceLoc',dialogue_position), ('PersonalInfo',personal_info), ('WordCont',wordCont)])
 
-    train_iter, valid_iter, test_iter = BucketIterator.splits((train, valid, test),batch_size = batch_size, sort_key=lambda x: len(x.Target),device = device)
+    train_iter, valid_iter, test_iter = BucketIterator.splits((train, valid, test), \
+    batch_size = batch_size, sort_key=lambda x: len(x.Target), device = device)
     TEXT.build_vocab(train,min_freq=3)
     context_id.build_vocab(train,valid,test)
-    return train_iter, valid_iter, test_iter TEXT.vocab.stoi['<pad>'], len(TEXT.vocab), TEXT.vocab.itos, context_id.vocab.itos
+    return train_iter, valid_iter, test_iter TEXT.vocab.stoi['<pad>'], len(TEXT.vocab),\
+     TEXT.vocab.itos, context_id.vocab.itos

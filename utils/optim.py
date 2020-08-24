@@ -32,7 +32,8 @@ class GradualWarmupScheduler(_LRScheduler):
                 return self.after_scheduler.get_lr()
             return [base_lr * self.multiplier for base_lr in self.base_lrs]
 
-        return [base_lr * ((self.multiplier - 1.) * self.last_epoch / self.total_epoch + 1.) for base_lr in self.base_lrs]
+        return [base_lr * ((self.multiplier - 1.) * self.last_epoch / self.total_epoch + 1.) \
+        for base_lr in self.base_lrs]
 
     def step_ReduceLROnPlateau(self, metrics, epoch=None):
         if epoch is None:
