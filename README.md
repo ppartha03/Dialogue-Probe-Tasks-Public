@@ -1,17 +1,11 @@
 # Dialogue-Probe-Tasks-Public
 We evaluate the dialogue generation models on their performance on probe tasks as discussed in the paper here. We observe the dialogue models lack in understanding the context better. More so we observe that the transformer model's large representation manifold affect the model's ability to learn underlying structures. This was evident in their performance on the probe-tasks. We discuss the results in detail in the paper [].
 
-The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/Dataset`
+The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/dataset`
 
 ### Package Requirements
 ```
-python==3.6
-torch==1.2
-torchtext
-seaborn
-bert-embedding
-pandas
-scikit-learn
+pip install requirements.txt
 ```
 
 ## Training the model
@@ -19,7 +13,7 @@ scikit-learn
 Use the `--model` argument to train the appropriate model. The options include `hred, seq2seq, seq2seq_attn, transformer and bilstm_attn`
 
 ```
-python Train.py --model bilstm_attn --dataset MultiWoZ --batch_size 32 --s2s_hidden_size 256 --s2s_embedding_size 128
+python train.py --model bilstm_attn --dataset MultiWoZ --batch_size 32 --s2s_hidden_size 256 --s2s_embedding_size 128
 ```
 
 ## Evaluating on the ProbeTasks
@@ -27,7 +21,7 @@ python Train.py --model bilstm_attn --dataset MultiWoZ --batch_size 32 --s2s_hid
 The probe tasks are evaluated in `ProbeTasks.py`. The choice of selecting the probetasks can be done by selecting the appropriate column index in probe tasks. `ProbeTasks.py` currently evaluates models on the probetasks sequetially.
 
 ```
-python ProbeTasks.py
+python probetasks.py
 ```
 The command writes the results on to a csv that can be used to plot the graphs in the appendix. The tables can be obtained from the CSV.
 
