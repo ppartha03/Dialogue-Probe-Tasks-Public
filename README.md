@@ -18,7 +18,7 @@ python train.py --model bilstm_attn --dataset MultiWoZ --batch_size 32 --s2s_hid
 
 ## Evaluating on the ProbeTasks
 
-The probe tasks are evaluated in `ProbeTasks.py`. The choice of selecting the probetasks can be done by selecting the appropriate column index in probe tasks. `ProbeTasks.py` currently evaluates models on the probetasks sequetially.
+The probe tasks are evaluated in `probetasks.py`. The choice of selecting the probetasks can be done by selecting the appropriate column index in probe tasks. `probetasks.py` currently evaluates models on the probetasks sequetially.
 
 ```
 python probetasks.py
@@ -27,22 +27,22 @@ The command writes the results on to a csv that can be used to plot the graphs i
 
 ## Plotting the results
 
-To generate the graphs use the following command from `Utils/`:
+To generate the graphs use the following command from `utils/`:
 
 ```
 python ProbeTasks.py --dataset MultiWoZ
 ```
-Also you can use `Utils/format_to_table.py` to generate latex table with error range.
+Also you can use `utils/format_to_table.py` to generate latex table with error range.
 
 ```
 python format_to_table.py --dataset MultiWoZ
 ```
 ## Alternate Metrics
 
-To select models with alternate metrics run `Utils/Alternate_Metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average), BLEU.
+To select models with alternate metrics run `utils/alternate_metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average), BLEU.
 
 ```
-python Alternate_Metrics.py --dataset MultiWoZ
+python alternate_metrics.py --dataset MultiWoZ
 ```
 
 To precompute the BERT embeddings for the vocabulary, use `python bertembeddings.py --dataset MultiWoZ`.
