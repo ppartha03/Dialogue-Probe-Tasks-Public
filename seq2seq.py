@@ -1,7 +1,7 @@
 # credits to the machine translation code tutorial at https://ravirajag.dev/
 from torchtext import data
-from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
-from modelbase.transformer import TransformerModel
+from base_models.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
+from base_models.transformer import TransformerModel
 from dataset_utils.data_iterator import MultiWoZ
 import sys
 import torch

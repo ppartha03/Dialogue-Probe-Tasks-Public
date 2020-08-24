@@ -1,6 +1,6 @@
 from torchtext import data
-from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
-from modelbase.transformer import TransformerModel
+from base_models.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
+from base_models.transformer import TransformerModel
 from dataset_utils.data_iterator import MultiWoZ, PersonaChat
 import torch.optim as optim
 from utils.eval_metric import getBLEU
