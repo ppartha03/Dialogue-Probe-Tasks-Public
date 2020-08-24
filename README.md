@@ -58,8 +58,8 @@ To precompute the BERT embeddings for the vocabulary, use `python bertembeddings
 If you find this work useful and use it in your own research, please consider citing our [paper](link).
 ```
 @misc{parthasarathi2020dialogueprobetasks,
-    title={},
-    author={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
+    title={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
+    author={Prasanna Parthasarathi and Joelle Pineau and Sarath Chandar},
     year={2020},
     eprint={},
     archivePrefix={arXiv},
