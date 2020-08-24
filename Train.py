@@ -1,11 +1,11 @@
 from torchtext import data
-from Code.RNN import RecurrentEncoder, Encoder, AttnDecoder, Decoder
-from Code.Transformer import TransformerModel
-from DatasetUtils.DataIterator import MultiWoZ, PersonaChat
+from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
+from modelbase.transformer import TransformerModel
+from dataset_utils.data_iterator import MultiWoZ, PersonaChat
 import torch.optim as optim
-from Utils.Eval_metric import getBLEU
-from Utils.optim import GradualWarmupScheduler
-from Utils.TransformerUtils import create_masks
+from utils.eval_metric import getBLEU
+from utils.optim import GradualWarmupScheduler
+from utils.transformer_utils import create_masks
 from Seq2Seq import Seq2Seq
 import sys
 import torch
@@ -14,7 +14,7 @@ import numpy as np
 import argparse
 import os
 import logging
-import wandb
+#import wandb
 import random
 import math
 import csv
@@ -39,6 +39,7 @@ parser.add_argument('--seed', type=int, default=100)
 args = parser.parse_args()
 
 np.random.seed(args.seed)
+torch.manual_seed(args.seed)
 def train(model, iterator, optimizer, criterion, clip, itos_vocab, itos_context_id):
     ''' Training loop for the model to train.
     Args:
@@ -55,7 +56,6 @@ def train(model, iterator, optimizer, criterion, clip, itos_vocab, itos_context_
     # loss
     epoch_loss = 0
     id_to_hidden = {}
-    # TODO:  convert the hiddenstate to string and save it as text file
     for i, batch in enumerate(iterator):
         src = batch.Context.to(device)
         trg = batch.Target.to(device)
@@ -80,10 +80,6 @@ def train(model, iterator, optimizer, criterion, clip, itos_vocab, itos_context_
         # trg shape shape should be [(sequence_len - 1) * batch_size]
         # output shape should be [(sequence_len - 1) * batch_size, output_dim]
         # for b_id,hidden_state in zip(batch.context_id.squeeze(0),hidden.squeeze(0)):
-        #     str_hidden = [itos_context_id[b_id]]
-        #     str_hidden += [str(x.item()) for x in hidden_state]
-        #     hidden_saver_train.write(','.join(str_hidden)+'\n')
-
 
         # backward pass
         loss.backward()
@@ -107,7 +103,6 @@ def evaluate(model, iterator, criterion, itos_vocab, itos_context_id, sample_sav
     Returns:
         epoch_loss: Average loss of the epoch.
     '''
-    #  some layers have different behavior during train/and evaluation (like BatchNorm, Dropout) so setting it matters.
     model.eval()
     # loss
     epoch_loss = 0
@@ -130,10 +125,6 @@ def evaluate(model, iterator, criterion, itos_vocab, itos_context_id, sample_sav
                 output , hidden = model(src,trg,0)  # turn off the teacher forcing
                 loss = criterion(output[1:].view(-1, output.shape[2]), trg[1:].view(-1))
             top1 = output.max(2)[1].squeeze(0)
-            # for b_id,hidden_state in zip(batch.context_id.squeeze(0),hidden.squeeze(0)):
-            #     str_hidden = [itos_context_id[b_id]]
-            #     str_hidden += [str(x.item()) for x in hidden_state]
-            #     hidden_saver_eval.write(','.join(str_hidden)+'\n')
             for b_index in range(len(batch)):
                 c = ' '.join([itos_vocab[idx.item()] for idx in batch.Context[:,b_index]])
                 t = ' '.join([itos_vocab[idx.item()] for idx in batch.Target[:,b_index]])
@@ -153,9 +144,11 @@ MAX_LENGTH = 101
 BATCH_SIZE = args.batch_size
 run_id = args.model + "_seed_" + str(args.seed)
 if args.dataset == 'MultiWoZ':
-    train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = MultiWoZ(batch_size = BATCH_SIZE ,max_length = MAX_LENGTH)
+    train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, \
+     itos_context_id = MultiWoZ(batch_size = BATCH_SIZE ,max_length = MAX_LENGTH)
 elif args.dataset == 'PersonaChat':
-    train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(batch_size = BATCH_SIZE, max_length = MAX_LENGTH)
+    train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, \
+    itos_context_id = PersonaChat(batch_size = BATCH_SIZE, max_length = MAX_LENGTH)
 N_EPOCHS = 25           # number of epochs
 CLIP = 10               # gradient clip value    # directory name to save the models.
 HIDDEN_SAVE_PATH = os.path.join('Results', args.dataset,'Hidden',run_id)
@@ -239,9 +232,23 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_iterator, criterion, itos_vocab, itos_context_id, sample_saver_eval)
     sample_saver_eval.close()
     valid_bleu = getBLEU(sample_saver_eval.name)
-    logging.info(f'| Epoch: {epoch+1:03} | Train Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f} | Val. Loss: {valid_loss:.3f} | Val. PPL: {math.exp(valid_loss):7.3f} | Val. BLEU: {valid_bleu:7.3f} |')
-    print(f'| Epoch: {epoch+1:03} | Train Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f} | Val. Loss: {valid_loss:.3f} | Val. PPL: {math.exp(valid_loss):7.3f} | Val. BLEU: {valid_bleu:7.3f} |')
+    logging.info(f'| Epoch: {epoch+1:03} | Train Loss: {train_loss:.3f} | \
+    Train PPL: {math.exp(train_loss):7.3f} | Val. Loss: {valid_loss:.3f} | \
+    Val. PPL: {math.exp(valid_loss):7.3f} | Val. BLEU: {valid_bleu:7.3f} |')
+    print(f'| Epoch: {epoch+1:03} | Train Loss: {train_loss:.3f} | \
+    Train PPL: {math.exp(train_loss):7.3f} | Val. Loss: {valid_loss:.3f} | \
+    Val. PPL: {math.exp(valid_loss):7.3f} | Val. BLEU: {valid_bleu:7.3f} |')
     torch.save(model.state_dict(), os.path.join(MODEL_SAVE_PATH,args.model+'_'+str(epoch)+'.pt'))
     if valid_bleu > best_validation_bleu:
         best_validation_bleu = valid_bleu
         torch.save(model.state_dict(), os.path.join(MODEL_SAVE_PATH,args.model+'_best_bleu.pt'))
+
+# Test set performance
+
+model_file = os.path.join(MODEL_SAVE_PATH,modeltype+'_best_bleu.pt')
+model.load_state_dict(torch.load(model_file))
+sample_saver_test = open(os.path.join(SAMPLES_PATH,'samples_test.txt'),'w')
+test_loss = evaluate(model, test_iterator, criterion, itos_vocab, itos_context_id, sample_saver_test)
+test_bleu = getBLEU(sample_saver_eval.name)
+print(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')
+logging.info(f'| Epoch: {epoch+1:03} | Test. Loss: {test_loss:.3f} | Test. PPL: {math.exp(test_loss):7.3f} | Test. BLEU: {test_bleu:7.3f} |')

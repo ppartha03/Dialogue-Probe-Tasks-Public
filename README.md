@@ -1,5 +1,5 @@
 # Dialogue-Probe-Tasks-Public
-We evaluate the dialogue generation models on their performance on probe tasks. We observe the dialogue models lack in understanding the context better. More so we observe that the transformer model's large representation manifold affect the model's ability to learn underlying structures. This was evident in their performance on the probe-tasks. We discuss the results in detail in the paper [].
+We evaluate the dialogue generation models on their performance on probe tasks as discussed in the paper here. We observe the dialogue models lack in understanding the context better. More so we observe that the transformer model's large representation manifold affect the model's ability to learn underlying structures. This was evident in their performance on the probe-tasks. We discuss the results in detail in the paper [].
 
 The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/Dataset`
 
@@ -45,7 +45,7 @@ python format_to_table.py --dataset MultiWoZ
 ```
 ## Alternate Metrics
 
-To select models with alternate metrics run `Utils/Alternate_Metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average), BLEU. 
+To select models with alternate metrics run `Utils/Alternate_Metrics.py`. The code will return a csv with the epoch number for the best model with METEOR, ROUGE-F1, BERT (Average), BLEU.
 
 ```
 python Alternate_Metrics.py --dataset MultiWoZ
@@ -53,3 +53,16 @@ python Alternate_Metrics.py --dataset MultiWoZ
 
 To precompute the BERT embeddings for the vocabulary, use `python bertembeddings.py --dataset MultiWoZ`.
 
+### Citation:
+
+If you find this work useful and use it in your own research, please consider citing our [paper](link).
+```
+@misc{parthasarathi2020dialogueprobetasks,
+    title={},
+    author={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
+    year={2020},
+    eprint={},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL}
+}
+```

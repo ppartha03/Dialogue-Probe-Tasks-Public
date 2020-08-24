@@ -9,12 +9,15 @@ def isCharOnly(s):
         return True
 
 def getBLEU(file_loc, increment=4):
+
     fp = open(file_loc)
     D = fp.readlines()
+
     meteor_s = 0.0
     sent_bleu = 0.0
     cnt_ = 1e-3
     i=0
+
     while i<len(D):
         tar = D[i+2].split()[2:]
         mod = D[i+1].split()[1:]
@@ -30,4 +33,5 @@ def getBLEU(file_loc, increment=4):
         sent_bleu += bleu_score([mod[:ind_mod]],tar[:ind_tar],(0.5,0.5))
         i+=increment
         cnt_+=1
+        
     return sent_bleu/float(cnt_)

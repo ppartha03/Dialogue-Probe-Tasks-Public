@@ -4,7 +4,9 @@ import torch
 from torch.autograd import Variable
 import torch.nn.functional as F
 from torch.distributions.categorical import Categorical
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 def nopeak_mask(size):
     "Mask out subsequent positions. aka subsequent_mask"
     np_mask = np.triu(np.ones((1, size, size)), k=1).astype('uint8')

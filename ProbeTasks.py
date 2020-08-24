@@ -1,18 +1,18 @@
 from torchtext import data
-from Code.RNN import RecurrentEncoder, Encoder, AttnDecoder, Decoder
-from Code.Transformer import TransformerModel
-from DatasetUtils.DataIterator import MultiWoZ, PersonaChat
+from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
+from modelbase.transformer import TransformerModel
+from dataset_utils.data_iterator import MultiWoZ, PersonaChat
 import torch.optim as optim
-from Utils.Eval_metric import getBLEU
-from Utils.optim import GradualWarmupScheduler
-from Utils.TransformerUtils import create_masks
+from utils.eval_metric import getBLEU
+from utils.optim import GradualWarmupScheduler
+from utils.transformer_utils import create_masks
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.decomposition import PCA
 from sklearn.metrics import f1_score
 import pandas as pd
-from Seq2Seq import Seq2Seq
+from seq2seq import Seq2Seq
 import sys
 import torch
 import torch.nn as nn
@@ -41,6 +41,17 @@ parser.add_argument('--transformer_n_head',type=int, default = 2)
 parser.add_argument('--batch_size',type=int,default=8)
 
 args = parser.parse_args()
+
+def plotHexbin(LM,epoch,filename, X_r):
+    fig, axs = plt.subplots(ncols=1, sharey=True, figsize=(7, 4))
+    fig.subplots_adjust(hspace=0.5, left=0.07, right=0.93)
+
+    hb = axs.hexbin(X_r[:,0], X_r[:,1], gridsize=80, bins='log', cmap='YlOrBr')
+    #axs.axis([-8,10.5,-7,10])
+    axs.set_title(LM +' context embeddings distribution after '+epoch+' epochs')
+    cb = fig.colorbar(hb, ax=axs)
+    cb.set_label('counts')
+    plt.savefig(filename)
 
 def probeTask(x_train, y_train, x_valid, y_valid):
     mlb = MultiLabelBinarizer().fit(y_train)
@@ -80,7 +91,8 @@ def getData(model,iterator,cid_dict):
         return X, context_ids
 
 
-def ProbeTasks(model, model_folder, epochs, modeltype, train_iterator, valid_iterator, dataset, csv_train, csv_valid, cid_dict,inp_seed, run_id):
+def ProbeTasks(model, model_folder, epochs, modeltype, train_iterator, \
+ valid_iterator, dataset, csv_train, csv_valid, cid_dict,inp_seed, run_id):
     ''' Evaluation loop for the model to evaluate.
     Args:
         model: A Seq2Seq model instance.
@@ -128,6 +140,9 @@ def ProbeTasks(model, model_folder, epochs, modeltype, train_iterator, valid_ite
         X_valid, cid_valid = getData(model, valid_iterator, cid_dict)
         X_train = torch.cat([x[1].view(1,-1) for x in sorted(zip(cid_train,X_train))], dim =0)#torch.cat(list(dict(sorted(zip(cid_train,X_train))).values()))
         X_valid = torch.cat([x[1].view(1,-1) for x in sorted(zip(cid_valid,X_valid))], dim =0)
+        if inp_seed == 100:
+            X_r = pca.fit_transform(X_train.cpu())
+            plotHexbin(modeltype,str(epoch),os.path.join(ANALYSIS_PATH,'Graphs',modeltype+'_'+str(epoch+1)+'.png'),X_r)
         for task in all_tasks_ind:
             y_train = csv_train.get(task)
             y_valid = csv_valid.get(task)
@@ -147,12 +162,16 @@ if __name__ == '__main__':
         run_id = inp_model + "_seed_" + str(inp_seed)
         if inp_dataset == 'MultiWoZ':
             train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = MultiWoZ(batch_size = BATCH_SIZE ,max_length = MAX_LENGTH)
-            csv_train = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_train.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
-            csv_valid = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_valid.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
+            csv_train = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_train.csv', header = None,\
+             converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
+            csv_valid = pd.read_csv('./Dataset/MultiWoZ/MultiWoZ_valid.csv', header = None,\
+             converters = {i: lambda x: x.split() for i in range(1,23)}).sort_values(by=0)
         elif inp_dataset == 'PersonaChat':
             train_iterator, valid_iterator, test_iterator, pad_idx, INPUT_DIM, itos_vocab, itos_context_id = PersonaChat(max_length = MAX_LENGTH, batch_size = BATCH_SIZE)
-            csv_train = pd.read_csv('./Dataset/PersonaChat/PersonaChat_train.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
-            csv_valid = pd.read_csv('./Dataset/PersonaChat/PersonaChat_valid.csv', header = None, converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
+            csv_train = pd.read_csv('./Dataset/PersonaChat/PersonaChat_train.csv', header = None,\
+             converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
+            csv_valid = pd.read_csv('./Dataset/PersonaChat/PersonaChat_valid.csv', header = None,\
+             converters = {i: lambda x: x.split() for i in range(1,9)}).sort_values(by=0)
         CLIP = 10               # gradient clip value    # directory name to save the models.
         MODEL_SAVE_PATH = os.path.join('Results', inp_dataset,'Model',run_id)
 
@@ -201,4 +220,5 @@ if __name__ == '__main__':
             print('Error: Model Not There')
             sys.exit(0)
         #epochs = range(0,25,2)
-        ProbeTasks(model,MODEL_SAVE_PATH, [0,24,'best_bleu'], inp_model, train_iterator, test_iterator, inp_dataset, csv_train, csv_valid, itos_context_id,inp_seed,run_id)
+        ProbeTasks(model,MODEL_SAVE_PATH, [0,24,'best_bleu'], inp_model, train_iterator,\
+         test_iterator, inp_dataset, csv_train, csv_valid, itos_context_id,inp_seed,run_id)

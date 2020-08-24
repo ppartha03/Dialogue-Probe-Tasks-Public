@@ -1,7 +1,8 @@
+#credits https://ravirajag.dev/
 from torchtext import data
-from Code.RNN import RecurrentEncoder, Encoder, AttnDecoder, Decoder
-from Code.Transformer import TransformerModel
-from DatasetUtils.DataIterator import MultiWoZ
+from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
+from modelbase.transformer import TransformerModel
+from dataset_utils.data_iterator import MultiWoZ
 import sys
 import torch
 import torch.nn as nn
@@ -14,6 +15,7 @@ import random
 from torch.distributions.categorical import Categorical
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 class Seq2Seq(nn.Module):
     ''' This class contains the implementation of complete sequence to sequence network.
     It uses to encoder to produce the context vectors.

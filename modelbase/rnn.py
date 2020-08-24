@@ -2,7 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions.categorical import Categorical
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 class Decoder(nn.Module):
     ''' This class contains the implementation of Decoder Module.
     Args:
@@ -53,6 +56,7 @@ class Decoder(nn.Module):
 
         return predicted, hidden, cell
 
+
 class AttnDecoder(nn.Module):
     def __init__(self, embedding_dim, output_dim, hidden_dim, n_layers, dropout, max_length):
         super(AttnDecoder, self).__init__()
@@ -71,13 +75,7 @@ class AttnDecoder(nn.Module):
     def forward(self, input, hidden, cell, encoder_outputs):
         embedded = self.embedding(input)
         encoder_outputs = encoder_outputs.view(-1, self.hidden_size, self.max_length)
-        attn_weights = F.softmax(
-            self.attn(
-                torch.cat(
-                    (embedded,
-                     hidden[0]),
-                    1)),
-            dim=1).unsqueeze(0).view(-1,self.max_length,1)
+        attn_weights = F.softmax(self.attn(torch.cat((embedded,hidden[0]),1)),dim=1).unsqueeze(0).view(-1,self.max_length,1)
         #encoder_outputs = encoder_outputs.view(-1, self.hidden_size, self.max_length)
         attn_applied = torch.bmm(encoder_outputs, attn_weights)
         output = torch.cat((embedded, attn_applied[:, :, 0]), 1)
@@ -105,7 +103,7 @@ class RecurrentEncoder(nn.Module):
         self.dropout = dropout
 
         self.embedding = nn.Embedding(input_dim, emb_dim)
-        self.rnn = nn.LSTM(emb_dim, hidden_dim, n_layers, dropout=dropout, bidirectional=False)  # default is time major
+        self.rnn = nn.LSTM(emb_dim, hidden_dim, n_layers, dropout=dropout, bidirectional=False)
         self.hrnn = nn.LSTM(hidden_dim,hidden_dim, n_layers, dropout = dropout, bidirectional = False)
         self.dropout = nn.Dropout(dropout)
 
@@ -146,7 +144,7 @@ class Encoder(nn.Module):
         self.dropout = dropout
         self.bi_directional = bi_directional
         self.embedding = nn.Embedding(input_dim, emb_dim)
-        self.rnn = nn.LSTM(emb_dim, hidden_dim, n_layers, dropout=dropout, bidirectional=bi_directional)  # default is time major
+        self.rnn = nn.LSTM(emb_dim, hidden_dim, n_layers, dropout=dropout, bidirectional=bi_directional)
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, src):

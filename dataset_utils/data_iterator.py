@@ -4,9 +4,14 @@ from torchtext.data import BucketIterator
 import os
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size = 2, max_length=100):
+
     def contexttoks(x): return x.split()[-max_length:]
+
     def toks(x): return x.split()
+
     context_id = data.Field()
     # multi class
     all_topics = data.Field(pad_token = '' , unk_token = None, tokenize = toks, is_target = True)
@@ -14,7 +19,8 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
     filename = None
     utterance_index = None
     # Sequential Data
-    TEXT = data.Field(sequential=True, fix_length = max_length ,eos_token = '<eor>', init_token = '<sos>',pad_token = '<pad>', tokenize = contexttoks)
+    TEXT = data.Field(sequential=True, fix_length = max_length ,eos_token = '<eor>', \
+    init_token = '<sos>',pad_token = '<pad>', tokenize = contexttoks)
     #target = data.Field()
     # single class
     target_length = data.Field(sequential=False)
@@ -51,17 +57,32 @@ def MultiWoZ(data_folder = './Dataset/MultiWoZ/',task = 'dialogue', batch_size =
 
     else:
         train = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_train.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
-    ('RecentSlots',recent_slots),('RecentValues',recent_values),('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),('NumAllInfo',number_all_info),\
-    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
+    ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
+    ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
+    ('RecentSlots',recent_slots),('RecentValues',recent_values),\
+    ('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),\
+    ('NumAllInfo',number_all_info),\
+    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
+    ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
         valid = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_valid.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
-    ('RecentSlots',recent_slots),('RecentValues',recent_values),('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),('NumAllInfo',number_all_info),\
-    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
+    ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
+    ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
+    ('RecentSlots',recent_slots),('RecentValues',recent_values),\
+    ('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),\
+    ('NumAllInfo',number_all_info),\
+    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
+    ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
         test = data.TabularDataset(path=os.path.join(data_folder,'MultiWoZ_test.csv'), format='csv',fields=[('context_id',None),('AllTopics',all_topics),('filename', None),\
-    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),('Responselength',target_length),('UtteranceLoc',dialogue_position),('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
-    ('RecentSlots',recent_slots),('RecentValues',recent_values),('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),('NumAllInfo',number_all_info),\
-    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
+    ('UtteranceIndex',None),('Context',TEXT),('Target',TEXT),\
+    ('Responselength',target_length),('UtteranceLoc',dialogue_position),\
+    ('RepeatInfo',repeating_info),('RecentTopic',current_dialogue_topic),\
+    ('RecentSlots',recent_slots),('RecentValues',recent_values),\
+    ('NumRecentInfo',number_local_info),('AllValues',all_values),('AllSlots',all_slots),\
+    ('NumAllInfo',number_all_info),\
+    ('NumRepeatInfo',num_overlap_slots),('NumAllTopics',num_topics),('IsMultiTask',is_multi_task),\
+    ('EntitySlots',entity_slots),('EntityValues',entity_values),('ActionSelect',action)])
 
     train_iter, valid_iter ,test_iter = BucketIterator.splits((train, valid, test),batch_size = batch_size, sort_key=lambda x: x.UtteranceLoc,device = device)
     TEXT.build_vocab(train,min_freq=3)

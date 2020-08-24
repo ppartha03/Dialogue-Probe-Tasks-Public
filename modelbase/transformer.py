@@ -1,3 +1,5 @@
+#Credits https://github.com/Matthewdowney18/Transformer_Dialogue
+
 import math, copy
 
 import torch
@@ -6,6 +8,8 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 class Embedder(nn.Module):
+
+    # model learnt embedding of input tokens.
     def __init__(self, vocab_size, emb_dim):
         super().__init__()
         self.emb_dim = emb_dim
