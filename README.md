@@ -1,5 +1,5 @@
 # Dialogue-Probe-Tasks-Public
-We evaluate the dialogue generation models on their performance on probe tasks as discussed in the paper here. We observe the dialogue models lack in understanding the context better. More so we observe that the transformer model's large representation manifold affect the model's ability to learn underlying structures. This was evident in their performance on the probe-tasks. We discuss the results in detail in the paper [].
+We evaluate the dialogue generation models on their performance on probe tasks as discussed in the paper here. The codebase shares the dataset used in the paper and the codebase that can be used to recreate the results in the paper. We hope the codebase serves as a base to work on further improvements on the results of the paper.
 
 The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/dataset`
 
@@ -45,7 +45,7 @@ To select models with alternate metrics run `utils/alternate_metrics.py`. The co
 python alternate_metrics.py --dataset MultiWoZ
 ```
 
-To precompute the BERT embeddings for the vocabulary, use `python bertembeddings.py --dataset MultiWoZ`.
+To precompute the BERT embeddings for the vocabulary, use `python bert_embeddings.py --dataset MultiWoZ`.
 
 ### Citation:
 
