@@ -1,4 +1,4 @@
-#credits https://ravirajag.dev/
+# credits to the machine translation code tutorial at https://ravirajag.dev/
 from torchtext import data
 from modelbase.rnn import RecurrentEncoder, Encoder, AttnDecoder, Decoder
 from modelbase.transformer import TransformerModel
@@ -33,7 +33,6 @@ class Seq2Seq(nn.Module):
     def forward(self, src, trg, teacher_forcing_ratio=1.0, probetask = False):
         # src is of shape [sequence_len, batch_size]
         # trg is of shape [sequence_len, batch_size]
-        # if teacher_forcing_ratio is 0.5 we use ground-truth inputs 50% of time and 50% time we use decoder outputs.
 
         batch_size = trg.shape[1]
         max_len = trg.shape[0]

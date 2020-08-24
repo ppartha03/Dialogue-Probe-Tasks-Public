@@ -40,6 +40,7 @@ args = parser.parse_args()
 
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
+
 def train(model, iterator, optimizer, criterion, clip, itos_vocab, itos_context_id):
     ''' Training loop for the model to train.
     Args:

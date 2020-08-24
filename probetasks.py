@@ -43,6 +43,9 @@ parser.add_argument('--batch_size',type=int,default=8)
 args = parser.parse_args()
 
 def plotHexbin(LM,epoch,filename, X_r):
+    # the function plots the hidden representation of the contexts
+    # from different models. The function is model invariant.
+    
     fig, axs = plt.subplots(ncols=1, sharey=True, figsize=(7, 4))
     fig.subplots_adjust(hspace=0.5, left=0.07, right=0.93)
 
