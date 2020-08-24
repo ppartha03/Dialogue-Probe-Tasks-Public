@@ -3,6 +3,17 @@ We evaluate the dialogue generation models on their performance on probe tasks. 
 
 The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/Dataset`
 
+### Package Requirements
+```
+python==3.6
+torch==1.2
+torchtext
+seaborn
+bert-embedding
+pandas
+scikit-learn
+```
+
 ## Training the model
 
 Use the `--model` argument to train the appropriate model. The options include `hred, seq2seq, seq2seq_attn, transformer and bilstm_attn`
