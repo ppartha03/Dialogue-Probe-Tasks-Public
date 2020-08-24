@@ -1,0 +1,7 @@
+python==3.6
+torch==1.2
+torchtext
+seaborn
+bert-embedding
+pandas
+scikit-learn
