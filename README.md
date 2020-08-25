@@ -1,5 +1,5 @@
 # Dialogue-Probe-Tasks-Public
-We evaluate the dialogue generation models on their performance on probe tasks as discussed in the paper here. The codebase shares the dataset used in the paper and the codebase that can be used to recreate the results in the paper. We hope the codebase serves as a base to work on further improvements on the results of the paper.
+We evaluate the dialogue generation models on their performance on probe tasks as discussed in our [paper](https://arxiv.org/abs/2008.10427). The codebase shares the dataset used in the paper and the codebase that can be used to recreate the results in the paper. We hope the codebase serves as a base to work on further improvements on the results of the paper.
 
 The modified dataset containing the probe tasks and the script to generate the probe tasks can be found in `/dataset`
 
@@ -52,11 +52,11 @@ To precompute the BERT embeddings for the vocabulary, use `python bert_embedding
 
 If you find this work useful and use it in your own research, please consider citing our [paper](link).
 ```
-@misc{parthasarathi2020dialogueprobetasks,
+@misc{parthasarathi2020evaluate,
     title={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
     author={Prasanna Parthasarathi and Joelle Pineau and Sarath Chandar},
     year={2020},
-    eprint={},
+    eprint={2008.10427},
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }
