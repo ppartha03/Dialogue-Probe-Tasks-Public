@@ -50,7 +50,7 @@ To precompute the BERT embeddings for the vocabulary, use `python bert_embedding
 
 ### Citation:
 
-If you find this work useful and use it in your own research, please consider citing our [paper](link).
+If you find this work useful and use it in your own research, please consider citing our [paper](https://arxiv.org/abs/2008.10427)).
 ```
 @misc{parthasarathi2020evaluate,
     title={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
