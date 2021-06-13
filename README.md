@@ -52,12 +52,12 @@ To precompute the BERT embeddings for the vocabulary, use `python bert_embedding
 
 If you find this work useful and use it in your own research, please consider citing our [paper](https://arxiv.org/abs/2008.10427).
 ```
-@misc{parthasarathi2020evaluate,
-    title={How To Evaluate Your Dialogue System: Probe Tasks as an Alternative for Token-level Evaluation Metrics},
-    author={Prasanna Parthasarathi and Joelle Pineau and Sarath Chandar},
-    year={2020},
-    eprint={2008.10427},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL}
+  @inproceedings{
+  parthasarathi2021Encoder,
+  author       = {Parthasarathi, Prasanna and Chandar, Sarath and Pineau, Joelle},
+  title        = {Do Encoder Representations of Generative Dialogue Models Encode Sufficient Information about the Task ?},
+  year         = {2021},
+  booktitle    = {Proceedings of the 22nd Annual SIGdial Meeting on Discourse and Dialogue},
+  publisher    = {Association for Computational Linguistics},
 }
 ```
